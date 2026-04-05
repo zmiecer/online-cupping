@@ -241,11 +241,9 @@
 
   // ── Google Sheets API ──────────────────────────────────────
   async function submitToSheet(rating) {
-    const resp = await fetch(CONFIG.GOOGLE_SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({ data: rating }),
-      redirect: 'follow',
-    });
+    const payload = encodeURIComponent(JSON.stringify(rating));
+    const url = CONFIG.GOOGLE_SCRIPT_URL + '?action=submit&data=' + payload;
+    const resp = await fetch(url);
     const result = await resp.json();
     if (result.status !== 'ok') throw new Error(result.message || 'Submit failed');
   }

@@ -72,6 +72,16 @@ function doGet(e) {
   try {
     var action = (e.parameter && e.parameter.action) || 'getRatings';
 
+    if (action === 'submit') {
+      var data = JSON.parse(e.parameter.data);
+      var sheet = getOrCreateSheet();
+      var row = HEADERS.map(function(h) { return data[h] || ''; });
+      sheet.appendRow(row);
+      return ContentService
+        .createTextOutput(JSON.stringify({ status: 'ok' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     if (action === 'getRatings') {
       var sheet = getOrCreateSheet();
       var lastRow = sheet.getLastRow();
