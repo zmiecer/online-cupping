@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Korean Coffee Cupping</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header id="app-header">
+    <div class="header-content">
+      <h1 class="logo" data-i18n="logo">Korean Coffee Cupping</h1>
+      <div class="header-right">
+        <select id="locale-toggle" class="locale-toggle" aria-label="Change language"></select>
+        <button id="user-badge" class="user-badge hidden" aria-label="Change user"></button>
+      </div>
+    </div>
+    <nav id="main-nav" class="hidden">
+      <button class="nav-btn active" data-page="rate" data-i18n="nav_rate">Rate</button>
+      <button class="nav-btn" data-page="map" data-i18n="nav_map">Map</button>
+      <button class="nav-btn" data-page="leaderboard" data-i18n="nav_leaderboard">Leaderboard</button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- WELCOME PAGE -->
+    <section id="page-welcome" class="page active">
+      <div class="welcome-container">
+        <div class="welcome-hero">
+          <img src="data/5_mountains.png" alt="Sun, Moon and Five Peaks" class="welcome-art">
+          <h2 data-i18n="welcome_heading">Welcome to<br>Korean Coffee Cupping</h2>
+          <p class="subtitle" data-i18n="welcome_subtitle">Let's blind-taste Korean specialty coffee and rate it together</p>
+        </div>
+        <div class="card">
+          <label for="participant-select" class="field-label" data-i18n="who_are_you">Who are you?</label>
+          <select id="participant-select" class="select-input">
+            <option value="" data-i18n="pick_name">Pick your name...</option>
+          </select>
+          <button id="btn-start" class="btn btn-primary" disabled data-i18n="start_tasting">Start Tasting</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RATE PAGE -->
+    <section id="page-rate" class="page">
+      <div class="rate-container">
+
+        <!-- Sample number input -->
+        <div class="card" id="sample-input-card">
+          <label for="sample-input" class="field-label" data-i18n="sample_number">Sample Number</label>
+          <p class="field-hint" data-i18n="sample_hint">Enter the 3-digit number from your mini-pack</p>
+          <input type="text" id="sample-input" class="sample-input" inputmode="numeric"
+                 pattern="[1-9]{3}" maxlength="3" placeholder="_ _ _" autocomplete="off">
+          <div id="sample-error" class="error-msg hidden">Sample not found. Check the number and try again.</div>
+          <button id="btn-lookup" class="btn btn-primary" disabled data-i18n="find_coffee">Find Coffee</button>
+        </div>
+
+        <!-- Rating form (hidden until sample is found) -->
+        <form id="rating-form" class="hidden">
+          <div class="form-header card">
+            <span class="sample-badge" id="form-sample-number"></span>
+            <p class="field-hint" data-i18n="form_hint">Rate at least Overall (1–9). Other attributes are optional. Higher = you enjoy it more.</p>
+          </div>
+
+          <div class="category-card card" data-category="fragrance_aroma">
+            <h3 class="category-title" data-i18n="cat_fragrance_aroma">Fragrance / Aroma</h3>
+            <p class="category-hint" data-i18n="hint_fragrance_aroma">How does it smell? Rate higher if you enjoy the aroma.</p>
+            <div class="score-circles" role="radiogroup"></div>
+            <textarea class="notes-input" data-i18n="notes_placeholder" placeholder="Notes (optional)" rows="2"></textarea>
+          </div>
+
+          <div class="category-card card" data-category="flavor">
+            <h3 class="category-title" data-i18n="cat_flavor">Flavor</h3>
+            <p class="category-hint" data-i18n="hint_flavor">The main taste. Rate higher if you like it.</p>
+            <div class="score-circles" role="radiogroup"></div>
+            <textarea class="notes-input" data-i18n="notes_placeholder" placeholder="Notes (optional)" rows="2"></textarea>
+          </div>
+
+          <div class="category-card card" data-category="aftertaste">
+            <h3 class="category-title" data-i18n="cat_aftertaste">Aftertaste</h3>
+            <p class="category-hint" data-i18n="hint_aftertaste">Taste that lingers after swallowing. Pleasant = higher.</p>
+            <div class="score-circles" role="radiogroup"></div>
+            <textarea class="notes-input" data-i18n="notes_placeholder" placeholder="Notes (optional)" rows="2"></textarea>
+          </div>
+
+          <div class="category-card card" data-category="acidity">
+            <h3 class="category-title" data-i18n="cat_acidity">Acidity</h3>
+            <p class="category-hint" data-i18n="hint_acidity">Brightness and liveliness. Too sour for you = lower, bright and pleasant = higher.</p>
+            <div class="score-circles" role="radiogroup"></div>
+            <textarea class="notes-input" data-i18n="notes_placeholder" placeholder="Notes (optional)" rows="2"></textarea>
+          </div>
+
+          <div class="category-card card" data-category="sweetness">
+            <h3 class="category-title" data-i18n="cat_sweetness">Sweetness</h3>
+            <p class="category-hint" data-i18n="hint_sweetness">Natural sweetness. More enjoyable = higher.</p>
+            <div class="score-circles" role="radiogroup"></div>
+            <textarea class="notes-input" data-i18n="notes_placeholder" placeholder="Notes (optional)" rows="2"></textarea>
+          </div>
+
+          <div class="category-card card" data-category="mouthfeel">
+            <h3 class="category-title" data-i18n="cat_mouthfeel">Mouthfeel</h3>
+            <p class="category-hint" data-i18n="hint_mouthfeel">Body and texture on the tongue. Rate higher if it feels good.</p>
+            <div class="score-circles" role="radiogroup"></div>
+            <textarea class="notes-input" data-i18n="notes_placeholder" placeholder="Notes (optional)" rows="2"></textarea>
+          </div>
+
+          <div class="category-card card" data-category="overall">
+            <h3 class="category-title" data-i18n="cat_overall">Overall</h3>
+            <p class="category-hint" data-i18n="hint_overall">Your overall impression. How much did you enjoy this coffee?</p>
+            <div class="score-circles" role="radiogroup"></div>
+            <textarea class="notes-input" data-i18n="notes_placeholder" placeholder="Notes (optional)" rows="2"></textarea>
+          </div>
+
+          <button type="submit" id="btn-submit" class="btn btn-primary btn-submit" disabled data-i18n="submit_rating">Submit Rating</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- REVEAL PAGE -->
+    <section id="page-reveal" class="page">
+      <div class="reveal-container">
+        <div class="reveal-header">
+          <p class="reveal-label" data-i18n="you_rated_sample">You rated sample</p>
+          <span class="sample-badge large" id="reveal-sample-number"></span>
+        </div>
+
+        <div class="reveal-card card">
+          <div class="reveal-scores" id="reveal-scores"></div>
+          <div class="reveal-total" id="reveal-total"></div>
+        </div>
+
+        <div class="reveal-divider">
+          <span data-i18n="the_coffee_was">The coffee was...</span>
+        </div>
+
+        <div class="reveal-coffee card" id="reveal-coffee">
+          <h2 class="reveal-coffee-name" id="reveal-name"></h2>
+          <p class="reveal-roastery" id="reveal-roastery"></p>
+
+          <div class="reveal-details" id="reveal-details"></div>
+
+          <div class="reveal-flavor" id="reveal-flavor-section">
+            <h4 data-i18n="tasting_notes">Roaster's Tasting Notes</h4>
+            <p id="reveal-flavor-notes"></p>
+          </div>
+
+          <div class="reveal-photos" id="reveal-photos"></div>
+
+          <div class="reveal-badges" id="reveal-badges"></div>
+
+          <div class="reveal-links" id="reveal-links"></div>
+
+          <div class="reveal-personal-note hidden" id="reveal-personal-note">
+            <h4 data-i18n="hosts_note">Host's Note</h4>
+            <p id="reveal-personal-note-text"></p>
+          </div>
+
+          <div class="reveal-additional-info hidden" id="reveal-additional-info">
+            <h4 data-i18n="additional_info">Additional Info</h4>
+            <p id="reveal-additional-info-text"></p>
+          </div>
+        </div>
+
+        <button id="btn-rate-another" class="btn btn-primary" data-i18n="rate_another">Rate Another Coffee</button>
+      </div>
+    </section>
+
+    <!-- MAP PAGE -->
+    <section id="page-map" class="page page-map">
+      <div class="map-container">
+        <div id="roastery-map"></div>
+        <div class="map-legend card">
+          <span class="legend-item"><span class="legend-dot revealed"></span> <span data-i18n="legend_tasted">Tasted</span></span>
+          <span class="legend-item"><span class="legend-dot hidden-marker"></span> <span data-i18n="legend_not_tasted">Not yet tasted</span></span>
+          <span class="legend-count" id="map-count"></span>
+        </div>
+      </div>
+      <div id="map-tasted-list" class="tasted-list-container"></div>
+    </section>
+
+    <!-- LEADERBOARD PAGE -->
+    <section id="page-leaderboard" class="page">
+      <div class="leaderboard-container">
+        <div class="leaderboard-header">
+          <h2 data-i18n="lb_leaderboard">Leaderboard</h2>
+          <button id="btn-refresh-leaderboard" class="btn btn-small" data-i18n="lb_refresh">Refresh</button>
+        </div>
+
+        <div id="leaderboard-loading" class="loading-state">
+          <div class="spinner"></div>
+          <p data-i18n="lb_loading">Loading ratings...</p>
+        </div>
+
+        <div id="leaderboard-scope" class="leaderboard-scope hidden"></div>
+
+        <div id="leaderboard-empty" class="empty-state hidden">
+          <p data-i18n="lb_empty">No ratings yet. Be the first to taste!</p>
+        </div>
+
+        <div id="leaderboard-content" class="hidden">
+          <div class="leaderboard-stats card" id="leaderboard-stats"></div>
+
+          <h3 class="section-title" id="title-top-coffees" data-i18n="lb_top_coffees">Top Coffees</h3>
+          <div id="top-coffees" class="ranking-list"></div>
+
+          <h3 class="section-title" id="title-top-roasteries" data-i18n="lb_top_roasteries">Top Roasteries</h3>
+          <div id="top-roasteries" class="ranking-list"></div>
+
+          <div id="final-sections" class="hidden">
+            <h3 class="section-title" data-i18n="lb_best_by_category">Best by Category</h3>
+            <div id="best-by-category" class="ranking-list"></div>
+
+            <h3 class="section-title" data-i18n="lb_most_divisive">Most Divisive</h3>
+            <p class="section-subtitle" data-i18n="lb_most_divisive_sub">Love it or hate it — highest disagreement</p>
+            <div id="most-divisive" class="ranking-list"></div>
+
+            <h3 class="section-title" data-i18n="lb_most_consistent">Crowd Pleasers</h3>
+            <p class="section-subtitle" data-i18n="lb_most_consistent_sub">Everyone agrees — lowest disagreement</p>
+            <div id="most-consistent" class="ranking-list"></div>
+
+            <h3 class="section-title" data-i18n="lb_best_by_origin">Best Origin</h3>
+            <div id="best-by-origin" class="ranking-list"></div>
+
+            <h3 class="section-title" data-i18n="lb_best_by_process">Best Process</h3>
+            <div id="best-by-process" class="ranking-list"></div>
+
+            <h3 class="section-title" data-i18n="lb_city_battle">City Battle</h3>
+            <div id="city-battle" class="battle-card card"></div>
+
+            <h3 class="section-title" data-i18n="lb_fancy_vs_prole">Fancy vs Proletarian</h3>
+            <p class="section-subtitle" data-i18n="lb_fancy_vs_prole_sub">Do (alleged) inheritance tax schemes make better coffee?</p>
+            <div id="fancy-vs-prole" class="battle-card card"></div>
+          </div>
+        </div>
+
+        <div id="leaderboard-error" class="error-state hidden">
+          <p data-i18n="lb_error">Could not load ratings. Check that Google Sheets is configured in config.js.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="locales.js"></script>
+  <script src="names.js"></script>
+  <script src="i18n.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
