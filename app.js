@@ -199,6 +199,10 @@
   }
 
   async function submitRating() {
+    const btn = $('#btn-submit');
+    if (btn.disabled) return;
+    btn.disabled = true;
+
     const rating = collectRating();
     lastRating = rating;
 
