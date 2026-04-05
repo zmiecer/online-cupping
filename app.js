@@ -241,12 +241,13 @@
 
   // ── Google Sheets API ──────────────────────────────────────
   async function submitToSheet(rating) {
-    await fetch(CONFIG.GOOGLE_SCRIPT_URL, {
+    const resp = await fetch(CONFIG.GOOGLE_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'submit', data: rating }),
-      mode: 'no-cors',
+      body: JSON.stringify({ data: rating }),
+      redirect: 'follow',
     });
+    const result = await resp.json();
+    if (result.status !== 'ok') throw new Error(result.message || 'Submit failed');
   }
 
   async function fetchRatingsFromSheet() {
