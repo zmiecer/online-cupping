@@ -371,8 +371,7 @@
         else if (days >= 10) cls = ' age-prime';
       }
       var hint = '';
-      if (c.espresso) hint = '<span class="drinking-order-hint">espresso?</span>';
-      else if (c.roast_level && /medium|dark/i.test(c.roast_level) && !/light/i.test(c.roast_level))
+      if (c.roast_level && /medium|dark/i.test(c.roast_level) && !/light/i.test(c.roast_level))
         hint = '<span class="drinking-order-hint">' + c.roast_level.toLowerCase() + '</span>';
       return `
       <div class="drinking-order-row${cls}">
