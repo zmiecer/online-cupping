@@ -4,9 +4,9 @@ const CONFIG = {
 
   // Firebase Realtime Database — fill in after creating your project
   FIREBASE: {
-    apiKey: '',
-    databaseURL: '',
-    projectId: '',
+    apiKey: 'AIzaSyDoxNgit8Yl---c5uJrLoeghNjcWwQHD4A',
+    databaseURL: 'https://coffee-cupping-2b7f2-default-rtdb.europe-west1.firebasedatabase.app',
+    projectId: 'coffee-cupping-2b7f2',
   },
 
   // Google Sheets fallback (kept for easy switch-back)
@@ -20,7 +20,7 @@ const CONFIG = {
     'Lericheskaya',
     'Tempur',
     'Michael',
-    'Manechka',
+    // 'Manechka',
     // Add your friends' names here
   ],
 };
