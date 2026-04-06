@@ -801,6 +801,35 @@ nav {
   object-fit: contain;
   border-radius: 4px;
 }
+.lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10001;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border: none;
+  font-size: 2.5rem;
+  width: 48px;
+  height: 64px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: background 0.15s;
+}
+.lightbox-arrow:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+.lightbox-arrow-left {
+  left: 8px;
+}
+.lightbox-arrow-right {
+  right: 8px;
+}
 
 .reveal-additional-info p {
   font-size: 0.8125rem;

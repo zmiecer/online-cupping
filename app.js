@@ -8,21 +8,65 @@
   let lastRating = null;
 
   // ── Lightbox ────────────────────────────────────────────────
+  var _lbIndex = 0;
+  var _lbCount = 0;
+
   function openLightbox(srcList, startIndex) {
     var lb = document.getElementById('lightbox');
     var track = document.getElementById('lightbox-track');
+    _lbCount = srcList.length;
+    _lbIndex = startIndex || 0;
     track.innerHTML = srcList.map(function (s) {
       return '<div class="lightbox-slide"><img src="' + s + '" alt=""></div>';
     }).join('');
     lb.classList.add('active');
-    var slide = track.children[startIndex || 0];
-    if (slide) slide.scrollIntoView({ behavior: 'instant', inline: 'center' });
+    lbGoTo(_lbIndex, false);
+    lbUpdateArrows();
   }
+
+  function lbGoTo(idx, smooth) {
+    var track = document.getElementById('lightbox-track');
+    var slide = track.children[idx];
+    if (slide) {
+      _lbIndex = idx;
+      slide.scrollIntoView({ behavior: smooth ? 'smooth' : 'instant', inline: 'center' });
+      lbUpdateArrows();
+    }
+  }
+
+  function lbUpdateArrows() {
+    var prev = document.getElementById('lightbox-prev');
+    var next = document.getElementById('lightbox-next');
+    if (prev) prev.style.display = (_lbIndex > 0 && _lbCount > 1) ? '' : 'none';
+    if (next) next.style.display = (_lbIndex < _lbCount - 1) ? '' : 'none';
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     var lb = document.getElementById('lightbox');
     if (!lb) return;
+
     lb.addEventListener('click', function (e) {
-      if (e.target.tagName !== 'IMG') {
+      if (e.target.tagName !== 'IMG' && !e.target.classList.contains('lightbox-arrow')) {
+        lb.classList.remove('active');
+      }
+    });
+
+    document.getElementById('lightbox-prev').addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (_lbIndex > 0) lbGoTo(_lbIndex - 1, true);
+    });
+    document.getElementById('lightbox-next').addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (_lbIndex < _lbCount - 1) lbGoTo(_lbIndex + 1, true);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (!lb.classList.contains('active')) return;
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+        if (_lbIndex < _lbCount - 1) lbGoTo(_lbIndex + 1, true);
+      } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+        if (_lbIndex > 0) lbGoTo(_lbIndex - 1, true);
+      } else if (e.key === 'Escape') {
         lb.classList.remove('active');
       }
     });
