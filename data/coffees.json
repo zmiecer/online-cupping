@@ -625,6 +625,7 @@
     },
     {
       "id": 23,
+      "excluded": true,
       "sample_number": 684,
       "coffee_name": "ARARIO BLEND",
       "bag_size": "200g",

@@ -212,7 +212,7 @@
   async function loadCoffees() {
     const resp = await fetch('data/coffees.json');
     const data = await resp.json();
-    coffeesData = data.coffees || [];
+    coffeesData = (data.coffees || []).filter(c => !c.excluded);
   }
 
   function findCoffeeBySample(num) {
