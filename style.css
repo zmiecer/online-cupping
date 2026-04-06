@@ -387,9 +387,10 @@ nav {
   font-size: 0.75rem;
   padding: 3px 10px;
   margin-bottom: 0;
-  min-width: 42px;
+  min-width: 44px;
   text-align: center;
   box-sizing: border-box;
+  font-variant-numeric: tabular-nums;
 }
 
 .drinking-order-row {
