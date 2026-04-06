@@ -771,13 +771,31 @@ nav {
   inset: 0;
   z-index: 9999;
   background: rgba(0, 0, 0, 0.9);
-  align-items: center;
-  justify-content: center;
 }
 .lightbox.active {
   display: flex;
+  align-items: center;
 }
-.lightbox img {
+.lightbox-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+}
+.lightbox-track::-webkit-scrollbar {
+  display: none;
+}
+.lightbox-slide {
+  flex: 0 0 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: center;
+}
+.lightbox-slide img {
   max-width: 92vw;
   max-height: 92vh;
   object-fit: contain;

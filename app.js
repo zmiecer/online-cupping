@@ -8,17 +8,21 @@
   let lastRating = null;
 
   // ── Lightbox ────────────────────────────────────────────────
-  function openLightbox(src) {
+  function openLightbox(srcList, startIndex) {
     var lb = document.getElementById('lightbox');
-    var img = document.getElementById('lightbox-img');
-    img.src = src;
+    var track = document.getElementById('lightbox-track');
+    track.innerHTML = srcList.map(function (s) {
+      return '<div class="lightbox-slide"><img src="' + s + '" alt=""></div>';
+    }).join('');
     lb.classList.add('active');
+    var slide = track.children[startIndex || 0];
+    if (slide) slide.scrollIntoView({ behavior: 'instant', inline: 'center' });
   }
   document.addEventListener('DOMContentLoaded', function () {
     var lb = document.getElementById('lightbox');
     if (!lb) return;
     lb.addEventListener('click', function (e) {
-      if (e.target.id !== 'lightbox-img') {
+      if (e.target.tagName !== 'IMG') {
         lb.classList.remove('active');
       }
     });
@@ -428,15 +432,17 @@
     const photoContainer = $('#reveal-photos');
     photoContainer.innerHTML = '';
     const photoFiles = getPhotoFiles(coffee.id);
-    photoFiles.forEach(file => {
+    const photoSrcs = photoFiles.map(f => `data/photos/${f}`);
+    photoFiles.forEach((file, idx) => {
       const img = document.createElement('img');
-      img.src = `data/photos/${file}`;
+      img.src = photoSrcs[idx];
       img.alt = `${name} package`;
       img.loading = 'lazy';
-      img.onerror = () => img.remove();
+      img.onerror = () => { photoSrcs.splice(photoSrcs.indexOf(img.src), 1); img.remove(); };
       img.addEventListener('click', function (e) {
         e.stopPropagation();
-        openLightbox(img.src);
+        const visibleSrcs = Array.from(photoContainer.querySelectorAll('img')).map(i => i.src);
+        openLightbox(visibleSrcs, visibleSrcs.indexOf(img.src));
       });
       photoContainer.appendChild(img);
     });
@@ -494,10 +500,10 @@
       cafePhotosGrid.innerHTML = photos.map(src =>
         `<img src="${src}" class="cafe-photo" alt="" loading="lazy">`
       ).join('');
-      cafePhotosGrid.querySelectorAll('.cafe-photo').forEach(img => {
+      cafePhotosGrid.querySelectorAll('.cafe-photo').forEach((img, idx) => {
         img.addEventListener('click', function (e) {
           e.stopPropagation();
-          openLightbox(img.src);
+          openLightbox(photos, idx);
         });
       });
       show(cafePhotosSection);
