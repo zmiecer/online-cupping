@@ -387,6 +387,9 @@ nav {
   font-size: 0.75rem;
   padding: 3px 10px;
   margin-bottom: 0;
+  min-width: 42px;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .drinking-order-row {
