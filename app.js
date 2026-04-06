@@ -174,6 +174,16 @@
     $('#btn-submit').disabled = !overallSelected;
   }
 
+  function roastAge(dateStr) {
+    if (!dateStr) return '—';
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const days = Math.floor(diff / 86400000);
+    const w = Math.floor(days / 7);
+    const d = days % 7;
+    if (w === 0) return `${d}d`;
+    return d === 0 ? `${w}w` : `${w}w ${d}d`;
+  }
+
   function renderDrinkingOrder() {
     const sorted = [...coffeesData]
       .sort((a, b) => {
@@ -183,13 +193,17 @@
         return a.roast_date.localeCompare(b.roast_date);
       });
 
-    $('#drinking-order-list').innerHTML = sorted.map((c, i) => `
-      <div class="drinking-order-row">
+    $('#drinking-order-list').innerHTML = sorted.map((c, i) => {
+      const age = roastAge(c.roast_date);
+      const ready = c.roast_date && (Date.now() - new Date(c.roast_date).getTime()) >= 21 * 86400000;
+      return `
+      <div class="drinking-order-row${ready ? ' ready' : ''}">
         <span class="drinking-order-num">${i + 1}.</span>
         <span class="sample-badge small">${c.sample_number}</span>
+        <span class="drinking-order-age">${age}</span>
         <span class="drinking-order-date">${c.roast_date || '—'}</span>
-      </div>
-    `).join('');
+      </div>`;
+    }).join('');
   }
 
   function initRatingForm() {
