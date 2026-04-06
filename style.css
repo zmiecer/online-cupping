@@ -758,6 +758,7 @@ nav {
 .cafe-photo {
   width: 85%;
   min-width: 85%;
+  max-height: 50vh;
   border-radius: var(--radius-sm);
   object-fit: cover;
   flex-shrink: 0;
@@ -809,10 +810,10 @@ nav {
   background: rgba(255, 255, 255, 0.15);
   color: #fff;
   border: none;
-  font-size: 2.5rem;
-  width: 48px;
-  height: 64px;
-  border-radius: 8px;
+  font-size: 1.5rem;
+  width: 32px;
+  height: 44px;
+  border-radius: 6px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -825,10 +826,20 @@ nav {
   background: rgba(255, 255, 255, 0.3);
 }
 .lightbox-arrow-left {
-  left: 8px;
+  left: 6px;
 }
 .lightbox-arrow-right {
-  right: 8px;
+  right: 6px;
+}
+@media (min-width: 480px) {
+  .lightbox-arrow {
+    font-size: 2.5rem;
+    width: 48px;
+    height: 64px;
+    border-radius: 8px;
+  }
+  .lightbox-arrow-left { left: 12px; }
+  .lightbox-arrow-right { right: 12px; }
 }
 
 .reveal-additional-info p {
