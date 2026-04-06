@@ -405,6 +405,13 @@ nav {
   color: var(--color-text);
 }
 
+.drinking-order-espresso {
+  font-size: 0.625rem;
+  color: var(--color-hint);
+  font-style: italic;
+  white-space: nowrap;
+}
+
 .drinking-order-age {
   flex: 1;
   text-align: right;

@@ -85,6 +85,7 @@
     },
     {
       "id": 3,
+      "espresso": true,
       "sample_number": 815,
       "coffee_name": "SANTA BABY",
       "bag_size": "100g",
@@ -193,6 +194,7 @@
     },
     {
       "id": 7,
+      "espresso": true,
       "sample_number": 165,
       "coffee_name": "SEOUL CINEMA",
       "bag_size": "200g",
@@ -544,6 +546,7 @@
     },
     {
       "id": 20,
+      "espresso": true,
       "sample_number": 141,
       "coffee_name": "나쓰메 소세키 (Natsume Soseki)",
       "bag_size": "200g",
@@ -598,6 +601,7 @@
     },
     {
       "id": 22,
+      "espresso": true,
       "sample_number": 598,
       "coffee_name": "",
       "bag_size": "200g",

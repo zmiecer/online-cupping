@@ -370,10 +370,12 @@
         if (days >= 26) cls = ' age-late';
         else if (days >= 10) cls = ' age-prime';
       }
+      var espTag = c.espresso ? '<span class="drinking-order-espresso">espresso?</span>' : '';
       return `
       <div class="drinking-order-row${cls}">
         <span class="drinking-order-num">${i + 1}.</span>
         <span class="sample-badge small">${c.sample_number}</span>
+        ${espTag}
         <span class="drinking-order-age">${age}</span>
         <span class="drinking-order-date">${c.roast_date || '—'}</span>
       </div>`;
