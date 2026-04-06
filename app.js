@@ -1123,7 +1123,7 @@
     const pts = mapBoundsByCity[city] || mapBoundsByCity.all || [];
     if (pts.length > 1) {
       var isMobile = window.innerWidth < 600;
-      mapInstance.fitBounds(pts, { padding: isMobile ? [30, 30] : [50, 50], maxZoom: 15 });
+      mapInstance.fitBounds(pts, { padding: isMobile ? [20, 20] : [50, 50], maxZoom: 15 });
     } else if (pts.length === 1) {
       mapInstance.setView(pts[0], 14);
     }
