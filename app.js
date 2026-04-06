@@ -843,12 +843,6 @@
       });
     });
 
-    if (bounds.length > 1) {
-      mapInstance.fitBounds(bounds, { padding: [40, 40] });
-    } else if (bounds.length === 1) {
-      mapInstance.setView(bounds[0], 13);
-    }
-
     const countEl = document.getElementById('map-count');
     if (countEl) countEl.textContent = `${revealedCount}/${total} ${I18N.t('discovered')}`;
 
@@ -862,23 +856,30 @@
     mapBoundsByCity.all = bounds;
 
     initMapCityButtons();
+    fitMapToCity(_selectedCity);
     renderTastedList(roasteryMap);
   }
 
   let mapBoundsByCity = {};
+  let _selectedCity = 'all';
+
+  function fitMapToCity(city) {
+    const pts = mapBoundsByCity[city] || mapBoundsByCity.all || [];
+    if (pts.length > 1) {
+      mapInstance.fitBounds(pts, { padding: [40, 40], maxZoom: 15 });
+    } else if (pts.length === 1) {
+      mapInstance.setView(pts[0], 14);
+    }
+  }
 
   function initMapCityButtons() {
     document.querySelectorAll('.btn-map-city').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.city === _selectedCity);
       btn.onclick = () => {
         document.querySelectorAll('.btn-map-city').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const city = btn.dataset.city;
-        const pts = mapBoundsByCity[city] || mapBoundsByCity.all || [];
-        if (pts.length > 1) {
-          mapInstance.fitBounds(pts, { padding: [40, 40], maxZoom: 15 });
-        } else if (pts.length === 1) {
-          mapInstance.setView(pts[0], 14);
-        }
+        _selectedCity = btn.dataset.city;
+        fitMapToCity(_selectedCity);
       };
     });
   }
