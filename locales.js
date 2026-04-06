@@ -315,7 +315,7 @@ var LOCALES = {
       'Almond': 'Міндаль',
       'Apple': 'Яблык',
       'Apricot': 'Абрыкос',
-      'Assam Tea': 'Чай Асам',
+      'Assam Tea': 'Асамскі чай',
       'Balanced': 'Збалансаваны',
       'Berry': 'Ягада',
       'Blueberry': 'Чарніца',
