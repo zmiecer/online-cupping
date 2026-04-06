@@ -70,6 +70,11 @@ var I18N = (function () {
     return pn[id] || fallback || '';
   }
 
+  function cafeNote(cafeId, fallback) {
+    var cn = strings().cafe_notes || {};
+    return cn[cafeId] || fallback || '';
+  }
+
   function name(englishName) {
     if (_locale === 'en' || !englishName) return englishName;
     var entry = (typeof NAME_LOCALES !== 'undefined') && NAME_LOCALES[englishName];
@@ -82,6 +87,7 @@ var I18N = (function () {
     tpl: tpl,
     notes: notes,
     personalNote: personalNote,
+    cafeNote: cafeNote,
     name: name,
     setLocale: setLocale,
     apply: apply,

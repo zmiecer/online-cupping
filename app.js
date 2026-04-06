@@ -8,6 +8,9 @@
   let lastRating = null;
   let mapTileLayer = null;
   let mapInstance = null;
+  let cafesData = [];
+  let _showRecommended = false;
+  let _recommendedLayer = null;
 
   // ── Dark mode ─────────────────────────────────────────────
   function isDark() {
@@ -501,7 +504,7 @@
   }
 
   // ── Reveal page ────────────────────────────────────────────
-  function showReveal(coffee, rating) {
+  async function showReveal(coffee, rating) {
     navigate('reveal');
 
     const scoreCard = $('#reveal-scores').parentElement;
@@ -522,7 +525,7 @@
     const attrAvg = attrCats.reduce((s, c) => s + (parseFloat(rating[c.key]) || 0), 0) / attrCats.length;
     $('#reveal-total').innerHTML = `
       <div class="reveal-total-row">
-        <span>${I18N.t('overall_label')}</span>
+        <span>${I18N.t('your_overall')}</span>
         <span class="value">${overall}<small> / 9</small></span>
       </div>
       <div class="reveal-total-row secondary">
@@ -530,6 +533,8 @@
         <span class="value">${attrAvg.toFixed(1)}<small> / 9</small></span>
       </div>
     `;
+
+    renderEveryoneAvg(coffee);
 
     const btnBack = $('#btn-rate-another');
     btnBack.textContent = I18N.t('rate_another');
@@ -540,11 +545,41 @@
 
     const roasteryText = coffee.roastery_en || '';
     const roasteryKr = coffee.roastery || '';
-    $('#reveal-roastery').textContent = roasteryKr + (roasteryText ? ` (${roasteryText})` : '');
+    var roasteryEl = $('#reveal-roastery');
+    roasteryEl.innerHTML = '<a href="#" class="reveal-roastery-link">' + roasteryKr + (roasteryText ? ' (' + roasteryText + ')' : '') + '</a>';
+    roasteryEl.querySelector('.reveal-roastery-link').addEventListener('click', function (e) {
+      e.preventDefault();
+      showCafeDetail(roasteryText, 'reveal');
+    });
 
     renderCoffeeBody(coffee, name);
 
     renderCoffeeExtras(coffee);
+  }
+
+  async function renderEveryoneAvg(coffee) {
+    var avgCard = $('#reveal-avg-card');
+    var avgTotal = $('#reveal-avg-total');
+    try {
+      var allRatings = await getAllRatings();
+      var coffeeRatings = allRatings.filter(r => Number(r.sample_number) === coffee.sample_number);
+      if (coffeeRatings.length > 0) {
+        var avgOverall = coffeeRatings.reduce(function (s, r) { return s + getOverall(r); }, 0) / coffeeRatings.length;
+        avgTotal.innerHTML =
+          '<div class="reveal-total-row">' +
+          '<span>' + I18N.t('avg_everyone') + '</span>' +
+          '<span class="value">' + avgOverall.toFixed(1) + '<small> / 9</small></span>' +
+          '</div>' +
+          '<div class="reveal-total-row secondary">' +
+          '<span>' + I18N.t('ratings_count').replace('{n}', coffeeRatings.length) + '</span>' +
+          '</div>';
+        show(avgCard);
+      } else {
+        hide(avgCard);
+      }
+    } catch (e) {
+      hide(avgCard);
+    }
   }
 
   function renderCoffeeBody(coffee, name) {
@@ -681,7 +716,7 @@
     'MOMOS COFFEE': ['momos_1.png', 'momos_2.png', 'momos_3.png'],
     'RECEPTION': ['reception_1.png', 'reception_2.png'],
     'Tide Coffee Roasters': ['tide_1.png', 'tide_2.png'],
-    'tonti': ['tonti.png'],
+    'tonti': ['tonti_1.png', 'tonti_2.png'],
     'Werk Roasters': ['werk_1.png', 'werk_2.png'],
   };
 
@@ -707,6 +742,168 @@
       } else {
         resetRateForm();
         navigate('rate');
+      }
+    });
+  }
+
+  // ── Cafe Detail ───────────────────────────────────────────
+  let _cafeReturnPage = 'map';
+
+  function findCafeByRoastery(roasteryEn) {
+    return cafesData.find(c => c.name_en === roasteryEn) || null;
+  }
+
+  async function showCafeDetail(cafeOrName, returnPage) {
+    await loadCafesData();
+    var cafe = typeof cafeOrName === 'string' ? findCafeByRoastery(cafeOrName) : cafeOrName;
+    if (!cafe) return;
+    _cafeReturnPage = returnPage || 'map';
+
+    navigate('cafe');
+
+    $('#cafe-detail-name').textContent = cafe.name_en;
+    var subParts = [];
+    if (cafe.name_ko) subParts.push(cafe.name_ko);
+    var loc = I18N.geo(cafe.city);
+    if (cafe.district) loc += ', ' + I18N.geo(cafe.district);
+    if (loc) subParts.push(loc);
+    $('#cafe-detail-sub').textContent = subParts.join(' · ');
+
+    var badgesEl = $('#cafe-detail-badges');
+    badgesEl.innerHTML = '';
+    if (cafe.from_batch_baby_guide === 'Yes') {
+      badgesEl.innerHTML += '<a href="https://www.instagram.com/batchbabycoffee" target="_blank" rel="noopener" class="badge-batch-baby">' +
+        '<img src="data/batch_baby.png" alt="Batch Baby" class="badge-batch-baby-img active">' +
+        '<span class="badge-batch-baby-text active">' + I18N.t('batch_baby_yes') + '</span></a>';
+    }
+    if (cafe.look_like_tax_avoidance === 'Yes') {
+      badgesEl.innerHTML += '<div class="badge-tax-avoidance">' + I18N.t('tax_avoidance') + '</div>';
+    }
+
+    var matching = coffeesData.filter(c => (c.roastery_en || c.roastery) === cafe.name_en);
+
+    var noteSection = $('#cafe-detail-note-section');
+    var noteEl = $('#cafe-detail-note');
+    var noteText = I18N.cafeNote(cafe.id, cafe.note);
+    if (noteText) {
+      noteEl.textContent = noteText;
+      show(noteSection);
+    } else {
+      hide(noteSection);
+    }
+
+    var linksEl = $('#cafe-detail-links');
+    var links = [];
+    if (cafe.instagram) links.push('<a href="' + cafe.instagram + '" target="_blank">Instagram</a>');
+    if (cafe.google_maps) links.push('<a href="' + cafe.google_maps + '" target="_blank">Maps</a>');
+    if (cafe.website) links.push('<a href="' + cafe.website + '" target="_blank">' + I18N.t('link_website') + '</a>');
+    linksEl.innerHTML = links.join('');
+
+    var photosSection = $('#cafe-detail-photos');
+    var photosGrid = $('#cafe-detail-photos-grid');
+    var photos = (cafe.photos || []).map(f => 'data/cafe_photos/' + f);
+    if (photos.length) {
+      photosGrid.innerHTML = photos.map(src =>
+        '<img src="' + src + '" class="cafe-photo" alt="" loading="lazy">'
+      ).join('');
+      photosGrid.querySelectorAll('.cafe-photo').forEach(function (img, idx) {
+        img.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (!photosGrid.classList.contains('dragging')) openLightbox(photos, idx);
+        });
+      });
+      enableDragScroll(photosGrid);
+      addCarouselDots(photosGrid, photos.length);
+      show(photosSection);
+    } else {
+      hide(photosSection);
+    }
+
+    var coffeesSection = $('#cafe-detail-coffees');
+    var coffeesList = $('#cafe-detail-coffees-list');
+    if (matching.length) {
+      var allRatings = await getAllRatings();
+      var myRatings = allRatings.filter(r => r.participant === currentUser);
+      var mySamples = new Set(myRatings.map(r => Number(r.sample_number)));
+
+      coffeesList.innerHTML = matching.map(function (c) {
+        var tasted = mySamples.has(c.sample_number);
+        var coffeeRatings = allRatings.filter(r => Number(r.sample_number) === c.sample_number);
+        var avgScore = coffeeRatings.length
+          ? coffeeRatings.reduce(function (s, r) { return s + getOverall(r); }, 0) / coffeeRatings.length
+          : null;
+
+        if (!tasted) {
+          return '<div class="cafe-coffee-item cafe-coffee-obscured">' +
+            '<span class="sample-badge">???</span>' +
+            '<div class="cafe-coffee-info">' +
+            '<div class="cafe-coffee-name">???</div>' +
+            '<div class="cafe-coffee-origin">' + I18N.t('map_hidden_sub') + '</div>' +
+            '</div></div>';
+        }
+
+        var name = getCoffeeName(c);
+        var scoreHtml = avgScore !== null
+          ? '<span class="cafe-coffee-score">' + avgScore.toFixed(1) + '</span>'
+          : '';
+
+        var details = [];
+        if (c.origin_country) details.push([I18N.t('detail_origin'), I18N.geo(c.origin_country)]);
+        if (c.region) details.push([I18N.t('detail_region'), c.region]);
+        if (c.variety) details.push([I18N.t('detail_variety'), c.variety]);
+        if (c.process) details.push([I18N.t('detail_process'), I18N.geo(c.process)]);
+        if (c.roast_level) details.push([I18N.t('detail_roast'), c.roast_level]);
+        if (c.roast_date) details.push([I18N.t('detail_roast_date'), c.roast_date]);
+        var detailsHtml = details.length
+          ? '<div class="reveal-details">' + details.map(function (d) {
+              return '<span class="reveal-detail-label">' + d[0] + '</span><span class="reveal-detail-value">' + d[1] + '</span>';
+            }).join('') + '</div>'
+          : '';
+
+        var flavorHtml = c.flavor_notes
+          ? '<div class="cafe-coffee-flavors">' + I18N.notes(c.flavor_notes) + '</div>'
+          : '';
+
+        return '<div class="cafe-coffee-card card clickable" data-sample="' + c.sample_number + '">' +
+          '<div class="cafe-coffee-header">' +
+          '<span class="sample-badge">' + c.sample_number + '</span>' +
+          '<div class="cafe-coffee-info"><div class="cafe-coffee-name">' + name + '</div></div>' +
+          scoreHtml +
+          '</div>' +
+          detailsHtml +
+          flavorHtml +
+          '</div>';
+      }).join('');
+
+      coffeesList.querySelectorAll('.clickable[data-sample]').forEach(function (item) {
+        item.addEventListener('click', function () {
+          var sample = parseInt(item.dataset.sample, 10);
+          var coffee = findCoffeeBySample(sample);
+          if (coffee) showCoffeeDetail(coffee);
+        });
+      });
+
+      show(coffeesSection);
+    } else {
+      hide(coffeesSection);
+    }
+
+    var backBtn = $('#btn-cafe-back');
+    var backKey = _cafeReturnPage === 'leaderboard' ? 'nav_leaderboard'
+      : _cafeReturnPage === 'reveal' ? 'rate_another'
+      : 'back_to_map';
+    backBtn.textContent = '← ' + I18N.t(backKey);
+  }
+
+  function initCafeDetail() {
+    $('#btn-cafe-back').addEventListener('click', function () {
+      if (_cafeReturnPage === 'reveal') {
+        navigate('reveal');
+      } else if (_cafeReturnPage === 'leaderboard') {
+        navigate('leaderboard');
+      } else {
+        navigate('map');
+        loadMap();
       }
     });
   }
@@ -814,7 +1011,7 @@
         if (r.website) links.push(`<a href="${r.website}" target="_blank">${I18N.t('link_website')}</a>`);
 
         const popup = `
-          <div class="map-popup-title">${r.name}</div>
+          <div class="map-popup-title"><a href="#" class="map-roastery-link" data-roastery="${r.name}">${r.name}</a></div>
           <div class="map-popup-sub">${r.nameKr} · ${I18N.geo(r.city)}${r.district ? ', ' + I18N.geo(r.district) : ''}</div>
           <div class="map-popup-coffees">${coffeeList}</div>
           <div class="map-popup-links">${links.join(' ')}</div>
@@ -839,6 +1036,12 @@
           if (coffee) showCoffeeDetail(coffee);
         });
       });
+      document.querySelectorAll('.map-roastery-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          showCafeDetail(link.dataset.roastery, 'map');
+        });
+      });
     });
 
     const countEl = document.getElementById('map-count');
@@ -856,6 +1059,55 @@
     initMapCityButtons();
     fitMapToCity(_selectedCity);
     renderTastedList(roasteryMap);
+
+    await loadCafesData();
+    initRecommendedToggle();
+    renderRecommendedMarkers();
+  }
+
+  async function loadCafesData() {
+    if (cafesData.length) return cafesData;
+    try {
+      const res = await fetch('data/cafes.json');
+      const json = await res.json();
+      cafesData = json.cafes || [];
+    } catch (e) { cafesData = []; }
+    return cafesData;
+  }
+
+  function renderRecommendedMarkers() {
+    if (_recommendedLayer) {
+      mapInstance.removeLayer(_recommendedLayer);
+      _recommendedLayer = null;
+    }
+    if (!_showRecommended) return;
+
+    _recommendedLayer = L.layerGroup();
+    var dark = isDark();
+    var recIcon = L.divIcon({
+      className: '',
+      html: '<div style="width:20px;height:20px;background:' + (dark ? '#A78BFA' : '#8B5CF6') + ';border:2px solid ' + (dark ? '#222' : '#fff') + ';border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.25);opacity:0.85"></div>',
+      iconSize: [20, 20],
+      iconAnchor: [10, 10],
+    });
+
+    cafesData.filter(c => c.type === 'visited' && c.lat && c.lng).forEach(c => {
+      var links = [];
+      if (c.instagram) links.push('<a href="' + c.instagram + '" target="_blank">Instagram</a>');
+      if (c.google_maps) links.push('<a href="' + c.google_maps + '" target="_blank">Maps</a>');
+      if (c.website) links.push('<a href="' + c.website + '" target="_blank">' + I18N.t('link_website') + '</a>');
+
+      var popup = '<div class="map-popup-title"><a href="#" class="map-roastery-link" data-roastery="' + c.name_en + '">' + c.name_en + '</a></div>' +
+        (c.name_ko ? '<div class="map-popup-sub">' + c.name_ko + ' · ' + I18N.geo(c.city) + (c.district ? ', ' + I18N.geo(c.district) : '') + '</div>' : '') +
+        (c.note ? '<div class="map-popup-note" style="margin:6px 0;font-style:italic;color:var(--color-text-secondary)">' + I18N.cafeNote(c.id, c.note) + '</div>' : '') +
+        (links.length ? '<div class="map-popup-links">' + links.join(' ') + '</div>' : '');
+
+      L.marker([c.lat, c.lng], { icon: recIcon })
+        .bindPopup(popup, { maxWidth: 200 })
+        .addTo(_recommendedLayer);
+    });
+
+    _recommendedLayer.addTo(mapInstance);
   }
 
   let mapBoundsByCity = {};
@@ -868,6 +1120,22 @@
     } else if (pts.length === 1) {
       mapInstance.setView(pts[0], 14);
     }
+  }
+
+  function initRecommendedToggle() {
+    var btn = document.getElementById('btn-recommended');
+    if (!btn) return;
+    var hasAny = cafesData.some(c => c.type === 'visited' && c.lat && c.lng);
+    if (!hasAny) { btn.style.display = 'none'; return; }
+    btn.style.display = '';
+    btn.classList.toggle('active', _showRecommended);
+    btn.onclick = function () {
+      _showRecommended = !_showRecommended;
+      btn.classList.toggle('active', _showRecommended);
+      var legendRec = document.querySelector('.legend-recommended');
+      if (legendRec) legendRec.style.display = _showRecommended ? '' : 'none';
+      renderRecommendedMarkers();
+    };
   }
 
   function initMapCityButtons() {
@@ -967,12 +1235,19 @@
       hide(scoreCard);
     }
 
+    renderEveryoneAvg(coffee);
+
     const name = getCoffeeName(coffee);
     $('#reveal-name').textContent = name;
 
     const roasteryText = coffee.roastery_en || '';
     const roasteryKr = coffee.roastery || '';
-    $('#reveal-roastery').textContent = roasteryKr + (roasteryText ? ` (${roasteryText})` : '');
+    var roasteryEl = $('#reveal-roastery');
+    roasteryEl.innerHTML = '<a href="#" class="reveal-roastery-link">' + roasteryKr + (roasteryText ? ' (' + roasteryText + ')' : '') + '</a>';
+    roasteryEl.querySelector('.reveal-roastery-link').addEventListener('click', function (e) {
+      e.preventDefault();
+      showCafeDetail(roasteryText, 'reveal');
+    });
 
     renderCoffeeBody(coffee, name);
     renderCoffeeExtras(coffee);
@@ -1146,8 +1421,9 @@
 
     roasteryScores.sort((a, b) => b.avg - a.avg);
 
-    $('#top-roasteries').innerHTML = roasteryScores.slice(0, 10).map((r, i) => `
-      <div class="ranking-item">
+    var container = $('#top-roasteries');
+    container.innerHTML = roasteryScores.slice(0, 10).map((r, i) => `
+      <div class="ranking-item ranking-clickable" data-roastery="${r.name}">
         <div class="ranking-position">${i + 1}</div>
         <div class="ranking-info">
           <div class="ranking-name">${r.name}</div>
@@ -1156,6 +1432,9 @@
         <div class="ranking-score">${r.avg.toFixed(1)}<small>/9</small></div>
       </div>
     `).join('');
+    container.querySelectorAll('[data-roastery]').forEach(el => {
+      el.addEventListener('click', () => showCafeDetail(el.dataset.roastery, 'leaderboard'));
+    });
   }
 
   function renderBestByCategory(ratings) {
@@ -1465,6 +1744,7 @@
     initRatingForm();
     renderDrinkingOrder();
     initReveal();
+    initCafeDetail();
     initLeaderboard();
     initUserBadge();
     initNav();

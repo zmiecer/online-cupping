@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Korean Coffee Cupping</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-  <link rel="stylesheet" href="style.css?v=25">
+  <link rel="stylesheet" href="style.css?v=30">
 </head>
 <body>
 
@@ -144,6 +144,10 @@
           <div class="reveal-total" id="reveal-total"></div>
         </div>
 
+        <div class="reveal-card card" id="reveal-avg-card">
+          <div class="reveal-total" id="reveal-avg-total"></div>
+        </div>
+
         <div class="reveal-divider">
           <span data-i18n="the_coffee_was">The coffee was...</span>
         </div>
@@ -185,18 +189,52 @@
       </div>
     </section>
 
+    <!-- CAFE DETAIL PAGE -->
+    <section id="page-cafe" class="page">
+      <div class="cafe-detail-container">
+        <div class="cafe-detail-header">
+          <h2 id="cafe-detail-name"></h2>
+          <p class="cafe-detail-sub" id="cafe-detail-sub"></p>
+        </div>
+
+        <div id="cafe-detail-badges" class="reveal-badges"></div>
+
+        <div id="cafe-detail-note-section" class="cafe-detail-note-section hidden">
+          <h4 data-i18n="hosts_note">Zmicier's Note</h4>
+          <div id="cafe-detail-note" class="cafe-detail-note"></div>
+        </div>
+
+        <div id="cafe-detail-links" class="cafe-detail-links"></div>
+
+        <div id="cafe-detail-photos" class="hidden">
+          <h4 data-i18n="cafe_photos">Cafe Photos</h4>
+          <div class="cafe-photos-grid" id="cafe-detail-photos-grid"></div>
+        </div>
+
+        <div id="cafe-detail-coffees" class="hidden">
+          <h4 data-i18n="cafe_coffees">Coffees</h4>
+          <div id="cafe-detail-coffees-list" class="cafe-coffees-list"></div>
+        </div>
+
+        <button id="btn-cafe-back" class="btn btn-primary" data-i18n="back_to_map">Back to Map</button>
+      </div>
+    </section>
+
     <!-- MAP PAGE -->
     <section id="page-map" class="page page-map">
       <div class="map-city-buttons">
         <button class="btn-map-city active" data-city="all" data-i18n="map_all">All</button>
         <button class="btn-map-city" data-city="Seoul" data-i18n="map_seoul">Seoul</button>
         <button class="btn-map-city" data-city="Busan" data-i18n="map_busan">Busan</button>
+        <span class="map-buttons-divider"></span>
+        <button class="btn-map-city btn-recommended" id="btn-recommended" data-i18n="map_recommended" style="display:none">Recommended</button>
       </div>
       <div class="map-container">
         <div id="roastery-map"></div>
         <div class="map-legend card">
           <span class="legend-item"><span class="legend-dot revealed"></span> <span data-i18n="legend_tasted">Tasted</span></span>
           <span class="legend-item"><span class="legend-dot hidden-marker"></span> <span data-i18n="legend_not_tasted">Not yet tasted</span></span>
+          <span class="legend-item legend-recommended" style="display:none"><span class="legend-dot recommended"></span> <span data-i18n="map_recommended">Recommended</span></span>
           <span class="legend-count" id="map-count"></span>
         </div>
       </div>
@@ -275,10 +313,10 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-  <script src="locales.js?v=25"></script>
-  <script src="names.js?v=25"></script>
-  <script src="i18n.js?v=25"></script>
-  <script src="config.js?v=25"></script>
-  <script src="app.js?v=25"></script>
+  <script src="locales.js?v=30"></script>
+  <script src="names.js?v=30"></script>
+  <script src="i18n.js?v=30"></script>
+  <script src="config.js?v=30"></script>
+  <script src="app.js?v=30"></script>
 </body>
 </html>
