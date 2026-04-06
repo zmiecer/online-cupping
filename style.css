@@ -1371,6 +1371,18 @@ nav {
   margin: 0 2px;
 }
 
+.btn-recommended {
+  padding: 6px 16px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 20px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
 .btn-recommended.active {
   background: #8B5CF6;
   color: #fff;
