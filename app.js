@@ -752,6 +752,7 @@
 
   // ── Cafe Detail ───────────────────────────────────────────
   let _cafeReturnPage = 'map';
+  let _currentCafe = null;
 
   function findCafeByRoastery(roasteryEn) {
     return cafesData.find(c => c.name_en === roasteryEn) || null;
@@ -761,6 +762,7 @@
     await loadCafesData();
     var cafe = typeof cafeOrName === 'string' ? findCafeByRoastery(cafeOrName) : cafeOrName;
     if (!cafe) return;
+    _currentCafe = cafe;
     _cafeReturnPage = returnPage || 'map';
 
     navigate('cafe');
@@ -1726,6 +1728,13 @@
         const pageId = activePage.id.replace('page-', '');
         if (pageId === 'leaderboard') loadLeaderboard();
         if (pageId === 'map') loadMap();
+        if (pageId === 'cafe' && _currentCafe) showCafeDetail(_currentCafe, _cafeReturnPage);
+        if (pageId === 'reveal') {
+          var sample = parseInt($('#reveal-sample-number').textContent, 10);
+          var coffee = findCoffeeBySample(sample);
+          if (coffee) showCoffeeDetail(coffee);
+        }
+        if (pageId === 'rate') renderDrinkingOrder();
       }
     });
   }
