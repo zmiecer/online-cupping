@@ -6,6 +6,31 @@
   let coffeesData = [];
   let currentCoffee = null;
   let lastRating = null;
+  let mapTileLayer = null;
+
+  // ── Dark mode ─────────────────────────────────────────────
+  function isDark() {
+    return document.documentElement.getAttribute('data-theme') === 'dark';
+  }
+
+  function getMapTileUrl() {
+    return isDark()
+      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+  }
+
+  function applyTheme(dark) {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    localStorage.setItem('cupping_theme', dark ? 'dark' : 'light');
+    var btn = document.getElementById('theme-toggle');
+    if (btn) btn.textContent = dark ? '☀' : '☾';
+    if (mapTileLayer) mapTileLayer.setUrl(getMapTileUrl());
+  }
+
+  (function initTheme() {
+    var saved = localStorage.getItem('cupping_theme');
+    if (saved === 'dark') applyTheme(true);
+  })();
 
   // ── Lightbox ────────────────────────────────────────────────
   var _lbIndex = 0;
@@ -114,6 +139,35 @@
       var dx = e.pageX - el.offsetLeft - startX;
       if (Math.abs(dx) > 3) moved = true;
       el.scrollLeft = scrollLeft - dx;
+    });
+  }
+
+  // ── Carousel dots ───────────────────────────────────────────
+  function addCarouselDots(scrollContainer, count) {
+    var existing = scrollContainer.parentNode.querySelector('.carousel-dots');
+    if (existing) existing.remove();
+    if (count <= 1) return;
+    var dots = document.createElement('div');
+    dots.className = 'carousel-dots';
+    for (var i = 0; i < count; i++) {
+      var d = document.createElement('span');
+      d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dots.appendChild(d);
+    }
+    scrollContainer.parentNode.insertBefore(dots, scrollContainer.nextSibling);
+
+    var syncTimer = null;
+    scrollContainer.addEventListener('scroll', function () {
+      clearTimeout(syncTimer);
+      syncTimer = setTimeout(function () {
+        var children = scrollContainer.children;
+        if (!children.length) return;
+        var w = children[0].offsetWidth + 8;
+        var idx = Math.round(scrollContainer.scrollLeft / w);
+        dots.querySelectorAll('.carousel-dot').forEach(function (dot, j) {
+          dot.classList.toggle('active', j === idx);
+        });
+      }, 60);
     });
   }
 
@@ -537,6 +591,9 @@
       photoContainer.appendChild(img);
     });
     enableDragScroll(photoContainer);
+    setTimeout(function () {
+      addCarouselDots(photoContainer, photoContainer.querySelectorAll('img').length);
+    }, 300);
 
     const linksContainer = $('#reveal-links');
     linksContainer.innerHTML = '';
@@ -598,6 +655,7 @@
         });
       });
       enableDragScroll(cafePhotosGrid);
+      addCarouselDots(cafePhotosGrid, photos.length);
       show(cafePhotosSection);
     } else {
       hide(cafePhotosSection);
@@ -663,7 +721,7 @@
     if (!container) return;
 
     mapInstance = L.map(container, { zoomControl: true }).setView([36.5, 128.0], 7);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    mapTileLayer = L.tileLayer(getMapTileUrl(), {
       maxZoom: 19,
       attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://osm.org/copyright">OSM</a>',
       subdomains: 'abcd',
@@ -1024,6 +1082,16 @@
     return parseFloat(rating.overall) || 0;
   }
 
+  function bindRankingClicks(container) {
+    container.querySelectorAll('.ranking-clickable').forEach(el => {
+      el.addEventListener('click', () => {
+        const sn = parseInt(el.dataset.sample, 10);
+        const coffee = findCoffeeBySample(sn);
+        if (coffee) showCoffeeDetail(coffee);
+      });
+    });
+  }
+
   function renderTopCoffees(ratings) {
     const bySample = {};
     ratings.forEach(r => {
@@ -1047,7 +1115,7 @@
     coffeeScores.sort((a, b) => b.avg - a.avg);
 
     $('#top-coffees').innerHTML = coffeeScores.slice(0, 10).map((c, i) => `
-      <div class="ranking-item">
+      <div class="ranking-item ranking-clickable" data-sample="${c.sample}">
         <div class="ranking-position">${i + 1}</div>
         <div class="ranking-info">
           <div class="ranking-name">${c.name}</div>
@@ -1056,6 +1124,7 @@
         <div class="ranking-score">${c.avg.toFixed(1)}<small>/9</small></div>
       </div>
     `).join('');
+    bindRankingClicks($('#top-coffees'));
   }
 
   function renderTopRoasteries(ratings) {
@@ -1078,16 +1147,20 @@
 
     roasteryScores.sort((a, b) => b.avg - a.avg);
 
-    $('#top-roasteries').innerHTML = roasteryScores.slice(0, 10).map((r, i) => `
-      <div class="ranking-item">
+    $('#top-roasteries').innerHTML = roasteryScores.slice(0, 10).map((r, i) => {
+      const first = coffeesData.find(c => (c.roastery_en || c.roastery) === r.name);
+      const sn = first ? first.sample_number : '';
+      return `
+      <div class="ranking-item ranking-clickable" data-sample="${sn}">
         <div class="ranking-position">${i + 1}</div>
         <div class="ranking-info">
           <div class="ranking-name">${r.name}</div>
           <div class="ranking-sub">${I18N.geo(r.city)}${r.district ? ', ' + I18N.geo(r.district) : ''} · ${I18N.tpl('lb_rating_count', { n: r.count })}</div>
         </div>
         <div class="ranking-score">${r.avg.toFixed(1)}<small>/9</small></div>
-      </div>
-    `).join('');
+      </div>`;
+    }).join('');
+    bindRankingClicks($('#top-roasteries'));
   }
 
   function renderBestByCategory(ratings) {
@@ -1160,7 +1233,7 @@
   function renderMostDivisive(ratings) {
     const items = getCoffeeVariance(ratings).sort((a, b) => b.std - a.std);
     $('#most-divisive').innerHTML = items.slice(0, 5).map((c, i) => `
-      <div class="ranking-item">
+      <div class="ranking-item ranking-clickable" data-sample="${c.sample}">
         <div class="ranking-position">${i + 1}</div>
         <div class="ranking-info">
           <div class="ranking-name">${c.name}</div>
@@ -1169,12 +1242,13 @@
         <div class="ranking-score">${c.std.toFixed(1)}</div>
       </div>
     `).join('');
+    bindRankingClicks($('#most-divisive'));
   }
 
   function renderMostConsistent(ratings) {
     const items = getCoffeeVariance(ratings).sort((a, b) => a.std - b.std);
     $('#most-consistent').innerHTML = items.slice(0, 5).map((c, i) => `
-      <div class="ranking-item">
+      <div class="ranking-item ranking-clickable" data-sample="${c.sample}">
         <div class="ranking-position">${i + 1}</div>
         <div class="ranking-info">
           <div class="ranking-name">${c.name}</div>
@@ -1183,6 +1257,7 @@
         <div class="ranking-score">${c.avg.toFixed(1)}<small>/9</small></div>
       </div>
     `).join('');
+    bindRankingClicks($('#most-consistent'));
   }
 
   function renderBestByOrigin(ratings) {
@@ -1378,10 +1453,18 @@
   }
 
   // ── Init ───────────────────────────────────────────────────
+  function initThemeToggle() {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.textContent = isDark() ? '☀' : '☾';
+    btn.addEventListener('click', function () { applyTheme(!isDark()); });
+  }
+
   async function init() {
     await loadCoffees();
     I18N.apply();
     initLocaleToggle();
+    initThemeToggle();
     initWelcome();
     initRate();
     initRatingForm();
