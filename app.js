@@ -1148,20 +1148,16 @@
 
     roasteryScores.sort((a, b) => b.avg - a.avg);
 
-    $('#top-roasteries').innerHTML = roasteryScores.slice(0, 10).map((r, i) => {
-      const first = coffeesData.find(c => (c.roastery_en || c.roastery) === r.name);
-      const sn = first ? first.sample_number : '';
-      return `
-      <div class="ranking-item ranking-clickable" data-sample="${sn}">
+    $('#top-roasteries').innerHTML = roasteryScores.slice(0, 10).map((r, i) => `
+      <div class="ranking-item">
         <div class="ranking-position">${i + 1}</div>
         <div class="ranking-info">
           <div class="ranking-name">${r.name}</div>
           <div class="ranking-sub">${I18N.geo(r.city)}${r.district ? ', ' + I18N.geo(r.district) : ''} · ${I18N.tpl('lb_rating_count', { n: r.count })}</div>
         </div>
         <div class="ranking-score">${r.avg.toFixed(1)}<small>/9</small></div>
-      </div>`;
-    }).join('');
-    bindRankingClicks($('#top-roasteries'));
+      </div>
+    `).join('');
   }
 
   function renderBestByCategory(ratings) {
