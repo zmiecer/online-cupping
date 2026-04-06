@@ -351,6 +351,11 @@ nav {
 #drinking-order-card details summary {
   cursor: pointer;
   user-select: none;
+  list-style: none;
+}
+
+#drinking-order-card details summary::-webkit-details-marker {
+  display: none;
 }
 
 .sample-badge.large {

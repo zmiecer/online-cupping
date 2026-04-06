@@ -15,7 +15,7 @@ var LOCALES = {
     pick_name: 'Pick your name...',
     start_tasting: 'Start Tasting',
 
-    drinking_order: 'Drinking Order',
+    drinking_order: 'Suggested Drinking Order ▸',
     drinking_order_hint: 'Oldest roast first',
     sample_number: 'Sample Number',
     sample_hint: 'Enter the 3-digit number from your mini-pack',
@@ -129,7 +129,7 @@ var LOCALES = {
     pick_name: 'Выберы імя...',
     start_tasting: 'Пачаць',
 
-    drinking_order: 'Парадак дэгустацыі',
+    drinking_order: 'Рэкамендаваны парадак дэгустацыі ▸',
     drinking_order_hint: 'Спачатку старэйшая абсмажка',
     sample_number: 'Нумар сэмпла',
     sample_hint: 'Увядзі 3-значны нумар з пакунка',
@@ -324,7 +324,7 @@ var LOCALES = {
     pick_name: 'Обери ім\'я...',
     start_tasting: 'Почати',
 
-    drinking_order: 'Порядок дегустації',
+    drinking_order: 'Рекомендований порядок дегустації ▸',
     drinking_order_hint: 'Спочатку найстаріше обсмаження',
     sample_number: 'Номер зразка',
     sample_hint: 'Введи 3-значний номер з пачки',
@@ -519,7 +519,7 @@ var LOCALES = {
     pick_name: 'Выбери имя...',
     start_tasting: 'Начать',
 
-    drinking_order: 'Порядок дегустации',
+    drinking_order: 'Рекомендуемый порядок дегустации ▸',
     drinking_order_hint: 'Сначала самая старая обжарка',
     sample_number: 'Номер образца',
     sample_hint: 'Введи 3-значный номер с мини-пачки',
@@ -714,7 +714,7 @@ var LOCALES = {
     pick_name: '이름을 선택하세요...',
     start_tasting: '시작',
 
-    drinking_order: '시음 순서',
+    drinking_order: '추천 시음 순서 ▸',
     drinking_order_hint: '오래된 로스팅부터',
     sample_number: '샘플 번호',
     sample_hint: '미니팩의 3자리 번호를 입력하세요',
