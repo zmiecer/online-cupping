@@ -1122,7 +1122,8 @@
   function fitMapToCity(city) {
     const pts = mapBoundsByCity[city] || mapBoundsByCity.all || [];
     if (pts.length > 1) {
-      mapInstance.fitBounds(pts, { padding: [60, 60], maxZoom: 15 });
+      var isMobile = window.innerWidth < 600;
+      mapInstance.fitBounds(pts, { padding: isMobile ? [30, 30] : [80, 80], maxZoom: 15 });
     } else if (pts.length === 1) {
       mapInstance.setView(pts[0], 14);
     }
