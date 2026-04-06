@@ -409,7 +409,7 @@ nav {
   color: var(--color-text);
 }
 
-.drinking-order-espresso {
+.drinking-order-hint {
   font-size: 0.625rem;
   color: var(--color-hint);
   font-style: italic;

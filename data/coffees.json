@@ -85,7 +85,6 @@
     },
     {
       "id": 3,
-      "espresso": true,
       "sample_number": 815,
       "coffee_name": "SANTA BABY",
       "bag_size": "100g",
@@ -194,7 +193,6 @@
     },
     {
       "id": 7,
-      "espresso": true,
       "sample_number": 165,
       "coffee_name": "SEOUL CINEMA",
       "bag_size": "200g",
@@ -546,7 +544,6 @@
     },
     {
       "id": 20,
-      "espresso": true,
       "sample_number": 141,
       "coffee_name": "나쓰메 소세키 (Natsume Soseki)",
       "bag_size": "200g",
@@ -640,12 +637,12 @@
       "region": "",
       "variety": "",
       "process": "",
-      "roast_level": "",
+      "roast_level": "Medium",
       "flavor_notes": "Sugar, Citrus, Plum",
       "photo": "",
       "additional_info": "Espresso blend. Arario Museum collaboration. 'Life is short for bad coffee' / 'LIFE IS SHORT — ART IS LONG'. 마음의양식 / 精神食糧.",
       "personal_note": "Напэўна, самыя вядомыя карэйскiя абсмажшчыкi ў сусвеце.",
-      "roast_date": "",
+      "roast_date": "2026-03-19",
       "instagram": "https://www.instagram.com/fritzcoffeecompany/",
       "google_maps": "https://maps.app.goo.gl/DBuq1DqFEQXgXPQB8",
       "lat": 37.5777021,
