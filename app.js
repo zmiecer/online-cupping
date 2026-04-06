@@ -23,6 +23,7 @@
     lbGoTo(_lbIndex, false);
     lbUpdateArrows();
     enableDragScroll(track);
+    track.onscroll = lbSyncIndex;
   }
 
   function lbGoTo(idx, smooth) {
@@ -33,6 +34,20 @@
       slide.scrollIntoView({ behavior: smooth ? 'smooth' : 'instant', inline: 'center' });
       lbUpdateArrows();
     }
+  }
+
+  var _lbSyncTimer = null;
+  function lbSyncIndex() {
+    clearTimeout(_lbSyncTimer);
+    _lbSyncTimer = setTimeout(function () {
+      var track = document.getElementById('lightbox-track');
+      if (!track || !track.children.length) return;
+      var slideW = track.children[0].offsetWidth;
+      if (slideW > 0) {
+        _lbIndex = Math.round(track.scrollLeft / slideW);
+        lbUpdateArrows();
+      }
+    }, 80);
   }
 
   function lbUpdateArrows() {
