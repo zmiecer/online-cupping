@@ -22,6 +22,7 @@
     lb.classList.add('active');
     lbGoTo(_lbIndex, false);
     lbUpdateArrows();
+    enableDragScroll(track);
   }
 
   function lbGoTo(idx, smooth) {
@@ -71,6 +72,35 @@
       }
     });
   });
+
+  // ── Drag-to-scroll for horizontal containers ───────────────
+  function enableDragScroll(el) {
+    var startX, scrollLeft, dragging = false, moved = false;
+    el.style.cursor = 'grab';
+    el.addEventListener('mousedown', function (e) {
+      dragging = true;
+      moved = false;
+      el.style.cursor = 'grabbing';
+      startX = e.pageX - el.offsetLeft;
+      scrollLeft = el.scrollLeft;
+    });
+    el.addEventListener('mouseleave', function () { dragging = false; el.style.cursor = 'grab'; });
+    el.addEventListener('mouseup', function () {
+      dragging = false;
+      el.style.cursor = 'grab';
+      if (moved) {
+        el.classList.add('dragging');
+        setTimeout(function () { el.classList.remove('dragging'); }, 50);
+      }
+    });
+    el.addEventListener('mousemove', function (e) {
+      if (!dragging) return;
+      e.preventDefault();
+      var dx = e.pageX - el.offsetLeft - startX;
+      if (Math.abs(dx) > 3) moved = true;
+      el.scrollLeft = scrollLeft - dx;
+    });
+  }
 
   const CATEGORIES = [
     { key: 'fragrance_aroma', i18n: 'cat_fragrance_aroma' },
@@ -485,11 +515,13 @@
       img.onerror = () => { photoSrcs.splice(photoSrcs.indexOf(img.src), 1); img.remove(); };
       img.addEventListener('click', function (e) {
         e.stopPropagation();
+        if (photoContainer.classList.contains('dragging')) return;
         const visibleSrcs = Array.from(photoContainer.querySelectorAll('img')).map(i => i.src);
         openLightbox(visibleSrcs, visibleSrcs.indexOf(img.src));
       });
       photoContainer.appendChild(img);
     });
+    enableDragScroll(photoContainer);
 
     const linksContainer = $('#reveal-links');
     linksContainer.innerHTML = '';
@@ -547,9 +579,10 @@
       cafePhotosGrid.querySelectorAll('.cafe-photo').forEach((img, idx) => {
         img.addEventListener('click', function (e) {
           e.stopPropagation();
-          openLightbox(photos, idx);
+          if (!cafePhotosGrid.classList.contains('dragging')) openLightbox(photos, idx);
         });
       });
+      enableDragScroll(cafePhotosGrid);
       show(cafePhotosSection);
     } else {
       hide(cafePhotosSection);
