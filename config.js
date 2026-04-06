@@ -19,7 +19,7 @@ const CONFIG = {
     'Zmicier',
     'Lericheskaya',
     'Tempur',
-    'Michael',
+    'Misha',
     // 'Manechka',
     // Add your friends' names here
   ],

@@ -17,11 +17,11 @@ var NAME_LOCALES = {
     uk: 'Темпур',
     ko: '템푸르',
   },
-  Michael: {
+  Misha: {
     ru: 'Миша',
     be: 'Міша',
-    uk: 'Михайло',
-    ko: '마이클',
+    uk: 'Міша',
+    ko: '미샤',
   },
   Manechka: {
     ru: 'Манечка',
