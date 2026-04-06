@@ -356,7 +356,11 @@ nav {
   font-variant-numeric: tabular-nums;
 }
 
-.drinking-order-row.ready .drinking-order-age {
+.drinking-order-row.age-prime .drinking-order-age {
+  color: #2e7d32;
+}
+
+.drinking-order-row.age-late .drinking-order-age {
   color: var(--color-accent);
 }
 

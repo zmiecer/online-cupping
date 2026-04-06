@@ -195,9 +195,14 @@
 
     $('#drinking-order-list').innerHTML = sorted.map((c, i) => {
       const age = roastAge(c.roast_date);
-      const ready = c.roast_date && (Date.now() - new Date(c.roast_date).getTime()) >= 21 * 86400000;
+      let cls = '';
+      if (c.roast_date) {
+        const days = Math.floor((Date.now() - new Date(c.roast_date).getTime()) / 86400000);
+        if (days >= 26) cls = ' age-late';
+        else if (days >= 10) cls = ' age-prime';
+      }
       return `
-      <div class="drinking-order-row${ready ? ' ready' : ''}">
+      <div class="drinking-order-row${cls}">
         <span class="drinking-order-num">${i + 1}.</span>
         <span class="sample-badge small">${c.sample_number}</span>
         <span class="drinking-order-age">${age}</span>
