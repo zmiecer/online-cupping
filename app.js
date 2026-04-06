@@ -7,6 +7,7 @@
   let currentCoffee = null;
   let lastRating = null;
   let mapTileLayer = null;
+  let mapInstance = null;
 
   // ── Dark mode ─────────────────────────────────────────────
   function isDark() {
@@ -711,8 +712,6 @@
   }
 
   // ── Map ────────────────────────────────────────────────────
-  let mapInstance = null;
-
   function initMap() {
     if (mapInstance) return;
     const container = document.getElementById('roastery-map');
