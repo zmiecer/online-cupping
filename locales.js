@@ -315,6 +315,7 @@ var LOCALES = {
       'Almond': 'Міндаль',
       'Apple': 'Яблык',
       'Apricot': 'Абрыкос',
+      'Assam Tea': 'Чай Асам',
       'Balanced': 'Збалансаваны',
       'Berry': 'Ягада',
       'Blueberry': 'Чарніца',
@@ -377,6 +378,7 @@ var LOCALES = {
       'Vanilla': 'Ваніль',
       'Walnut': 'Грэцкі арэх',
       'Wine': 'Віно',
+      'Zest': 'Цэдра',
     },
     personal_notes: {
       16: 'Да іх ісці трэба было лабірынтамі, і яны мне ледзь не на каленцы гэтую пачку адсыпалі — дужа прыемныя і лампавыя хлопцы.',
@@ -540,6 +542,7 @@ var LOCALES = {
       'Almond': 'Мигдаль',
       'Apple': 'Яблуко',
       'Apricot': 'Абрикос',
+      'Assam Tea': 'Чай Ассам',
       'Balanced': 'Збалансований',
       'Berry': 'Ягода',
       'Blueberry': 'Чорниця',
@@ -602,6 +605,7 @@ var LOCALES = {
       'Vanilla': 'Ваніль',
       'Walnut': 'Волоський горіх',
       'Wine': 'Вино',
+      'Zest': 'Цедра',
     },
     personal_notes: {
       1: 'Їхня фішка в тому, що в них немає вивіски. Камуфляж, хаха.',
@@ -799,6 +803,7 @@ var LOCALES = {
       'Almond': 'Миндаль',
       'Apple': 'Яблоко',
       'Apricot': 'Абрикос',
+      'Assam Tea': 'Чай Ассам',
       'Balanced': 'Сбалансированный',
       'Berry': 'Ягода',
       'Blueberry': 'Черника',
@@ -861,6 +866,7 @@ var LOCALES = {
       'Vanilla': 'Ваниль',
       'Walnut': 'Грецкий орех',
       'Wine': 'Вино',
+      'Zest': 'Цедра',
     },
     personal_notes: {
       1: 'Их фишка в том, что у них нет вывески. Камуфляж, хаха.',
@@ -1058,6 +1064,7 @@ var LOCALES = {
       'Almond': '아몬드',
       'Apple': '사과',
       'Apricot': '살구',
+      'Assam Tea': '아삼 티',
       'Balanced': '균형 잡힌',
       'Berry': '베리',
       'Blueberry': '블루베리',
@@ -1120,6 +1127,7 @@ var LOCALES = {
       'Vanilla': '바닐라',
       'Walnut': '호두',
       'Wine': '와인',
+      'Zest': '제스트',
     },
     personal_notes: {
       1: '간판이 없는 게 이 카페의 특징이에요. 카무플라주(위장), 하하.',
