@@ -32,6 +32,9 @@
   --color-green: #4CAF7D;
   --shadow: 0 1px 4px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.15);
 }
+[data-theme="dark"] ::-webkit-scrollbar { width: 6px; height: 6px; }
+[data-theme="dark"] ::-webkit-scrollbar-track { background: transparent; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
 [data-theme="dark"] .badge-tax-avoidance { background: #3a1c1c; }
 [data-theme="dark"] .battle-side.winner { background: #1e2a40; }
 [data-theme="dark"] .btn-primary:active:not(:disabled) { background: #5478c8; }
@@ -43,6 +46,9 @@
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
+}
+[data-theme="dark"] {
+  scrollbar-color: #444 transparent;
 }
 
 body {
@@ -108,12 +114,13 @@ body {
 }
 
 .theme-toggle {
-  background: var(--color-bg);
+  background: var(--color-surface);
   border: 1.5px solid var(--color-border);
   border-radius: 50%;
   width: 30px;
   height: 30px;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  color: var(--color-text);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -832,7 +839,7 @@ nav {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--color-border);
+  background: var(--color-hint);
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
@@ -1146,7 +1153,8 @@ nav {
 
 #roastery-map {
   width: 100%;
-  height: calc(100dvh - 95px);
+  height: calc(100dvh - 140px);
+  max-height: 600px;
 }
 
 .map-legend {
@@ -1178,7 +1186,7 @@ nav {
 }
 
 .legend-dot.revealed {
-  background: var(--color-green);
+  background: var(--color-primary);
 }
 
 .legend-dot.hidden-marker {
@@ -1387,5 +1395,11 @@ nav {
 @media (min-width: 640px) {
   .page {
     max-width: 560px;
+  }
+  .page-map {
+    max-width: none;
+  }
+  #roastery-map {
+    max-height: 520px;
   }
 }

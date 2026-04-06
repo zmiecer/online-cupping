@@ -9,7 +9,7 @@ var LOCALES = {
     nav_map: 'Map',
     nav_leaderboard: 'Leaderboard',
 
-    welcome_heading: 'Welcome to\nKorean Coffee Cupping',
+    welcome_heading: 'Zmicier invites you to\nonline Korean coffee cupping',
     welcome_subtitle: "Let's blind-taste Korean specialty coffee and rate it together",
     who_are_you: 'Who are you?',
     pick_name: 'Pick your name...',
@@ -841,7 +841,7 @@ var LOCALES = {
     nav_map: '지도',
     nav_leaderboard: '순위',
 
-    welcome_heading: '한국 커피 커핑에\n오신 것을 환영합니다',
+    welcome_heading: '쩨미테리가 한국 커피\n온라인 커핑에 초대합니다',
     welcome_subtitle: '한국 스페셜티 커피를 블라인드 테이스팅하고 함께 평가해요',
     who_are_you: '누구세요?',
     pick_name: '이름을 선택하세요...',
@@ -889,7 +889,7 @@ var LOCALES = {
     detail_roasted_in: '로스팅 장소',
     detail_roast_date: '로스팅 날짜',
     tasting_notes: '로스터의 테이스팅 노트',
-    hosts_note: '즈미체르의 메모',
+    hosts_note: '쩨미테리의 메모',
     cafe_photos: '카페 사진',
     additional_info: '추가 정보',
 

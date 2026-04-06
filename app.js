@@ -25,6 +25,7 @@
     var btn = document.getElementById('theme-toggle');
     if (btn) btn.textContent = dark ? '☀' : '☾';
     if (mapTileLayer) mapTileLayer.setUrl(getMapTileUrl());
+    if (mapInstance) loadMap();
   }
 
   (function initTheme() {
@@ -591,9 +592,6 @@
       photoContainer.appendChild(img);
     });
     enableDragScroll(photoContainer);
-    setTimeout(function () {
-      addCarouselDots(photoContainer, photoContainer.querySelectorAll('img').length);
-    }, 300);
 
     const linksContainer = $('#reveal-links');
     linksContainer.innerHTML = '';
@@ -776,16 +774,17 @@
       }
     });
 
+    var dark = isDark();
     const revealedIcon = L.divIcon({
       className: '',
-      html: '<div style="width:28px;height:28px;background:#2D6B50;border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.35)"></div>',
+      html: '<div style="width:28px;height:28px;background:' + (dark ? '#6B8FE8' : '#1B3A8C') + ';border:3px solid ' + (dark ? '#222' : '#fff') + ';border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.35)"></div>',
       iconSize: [28, 28],
       iconAnchor: [14, 14],
     });
 
     const hiddenIcon = L.divIcon({
       className: '',
-      html: '<div style="width:22px;height:22px;background:#B0B8C4;border:3px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.2)"></div>',
+      html: '<div style="width:22px;height:22px;background:#B0B8C4;border:3px solid ' + (dark ? '#222' : '#fff') + ';border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.3)"></div>',
       iconSize: [22, 22],
       iconAnchor: [11, 11],
     });
