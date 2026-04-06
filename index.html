@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Korean Coffee Cupping</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=13">
 </head>
 <body>
 
@@ -169,6 +169,11 @@
             <p id="reveal-personal-note-text"></p>
           </div>
 
+          <div class="reveal-cafe-photos hidden" id="reveal-cafe-photos">
+            <h4 data-i18n="cafe_photos">Cafe Photos</h4>
+            <div class="cafe-photos-grid" id="cafe-photos-grid"></div>
+          </div>
+
           <div class="reveal-additional-info hidden" id="reveal-additional-info">
             <h4 data-i18n="additional_info">Additional Info</h4>
             <p id="reveal-additional-info-text"></p>
@@ -181,6 +186,11 @@
 
     <!-- MAP PAGE -->
     <section id="page-map" class="page page-map">
+      <div class="map-city-buttons">
+        <button class="btn-map-city active" data-city="all" data-i18n="map_all">All</button>
+        <button class="btn-map-city" data-city="Seoul" data-i18n="map_seoul">Seoul</button>
+        <button class="btn-map-city" data-city="Busan" data-i18n="map_busan">Busan</button>
+      </div>
       <div class="map-container">
         <div id="roastery-map"></div>
         <div class="map-legend card">
@@ -255,13 +265,17 @@
 
   </main>
 
+  <div class="lightbox" id="lightbox">
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-  <script src="locales.js?v=6"></script>
-  <script src="names.js?v=6"></script>
-  <script src="i18n.js?v=6"></script>
-  <script src="config.js?v=6"></script>
-  <script src="app.js?v=6"></script>
+  <script src="locales.js?v=13"></script>
+  <script src="names.js?v=13"></script>
+  <script src="i18n.js?v=13"></script>
+  <script src="config.js?v=13"></script>
+  <script src="app.js?v=13"></script>
 </body>
 </html>

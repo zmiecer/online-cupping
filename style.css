@@ -634,6 +634,7 @@ nav {
   border-radius: var(--radius-sm);
   object-fit: cover;
   flex-shrink: 0;
+  cursor: pointer;
 }
 
 .reveal-links {
@@ -719,8 +720,9 @@ nav {
   font-weight: 600;
 }
 
-/* Personal note & additional info */
+/* Personal note, cafe photos & additional info */
 .reveal-personal-note,
+.reveal-cafe-photos,
 .reveal-additional-info {
   margin-top: 16px;
   padding-top: 16px;
@@ -728,6 +730,7 @@ nav {
 }
 
 .reveal-personal-note h4,
+.reveal-cafe-photos h4,
 .reveal-additional-info h4 {
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -741,6 +744,44 @@ nav {
   color: var(--color-primary);
   line-height: 1.5;
   font-style: italic;
+}
+
+.cafe-photos-grid {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-top: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cafe-photo {
+  width: 85%;
+  min-width: 85%;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Lightbox */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.9);
+  align-items: center;
+  justify-content: center;
+}
+.lightbox.active {
+  display: flex;
+}
+.lightbox img {
+  max-width: 92vw;
+  max-height: 92vh;
+  object-fit: contain;
+  border-radius: 4px;
 }
 
 .reveal-additional-info p {
@@ -923,6 +964,31 @@ nav {
 .page-map {
   padding: 0;
   max-width: none;
+}
+
+.map-city-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+}
+
+.btn-map-city {
+  padding: 6px 16px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 20px;
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-map-city.active {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
 }
 
 .map-container {

@@ -65,6 +65,11 @@ var I18N = (function () {
     }).join(', ');
   }
 
+  function personalNote(id, fallback) {
+    var pn = strings().personal_notes || {};
+    return pn[id] || fallback || '';
+  }
+
   function name(englishName) {
     if (_locale === 'en' || !englishName) return englishName;
     var entry = (typeof NAME_LOCALES !== 'undefined') && NAME_LOCALES[englishName];
@@ -76,6 +81,7 @@ var I18N = (function () {
     geo: geo,
     tpl: tpl,
     notes: notes,
+    personalNote: personalNote,
     name: name,
     setLocale: setLocale,
     apply: apply,
