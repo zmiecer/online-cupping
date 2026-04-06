@@ -208,12 +208,10 @@
 
     saveRatingLocal(rating);
 
-    if (CONFIG.GOOGLE_SCRIPT_URL) {
-      try {
-        await submitToSheet(rating);
-      } catch (err) {
-        console.warn('Failed to submit to Google Sheets:', err);
-      }
+    try {
+      await submitToBackend(rating);
+    } catch (err) {
+      console.warn('Failed to submit rating:', err);
     }
 
     showReveal(currentCoffee, rating);
@@ -243,7 +241,29 @@
     return JSON.parse(localStorage.getItem('cupping_ratings') || '[]');
   }
 
-  // ── Google Sheets API ──────────────────────────────────────
+  // ── Firebase Realtime DB ──────────────────────────────────
+  let _fbDb = null;
+
+  function firebaseDb() {
+    if (!_fbDb) {
+      firebase.initializeApp(CONFIG.FIREBASE);
+      _fbDb = firebase.database();
+    }
+    return _fbDb;
+  }
+
+  async function submitToFirebase(rating) {
+    await firebaseDb().ref('ratings').push(rating);
+  }
+
+  async function fetchRatingsFromFirebase() {
+    const snap = await firebaseDb().ref('ratings').once('value');
+    const val = snap.val();
+    if (!val) return [];
+    return Object.values(val);
+  }
+
+  // ── Google Sheets API (fallback) ─────────────────────────
   async function submitToSheet(rating) {
     const payload = encodeURIComponent(JSON.stringify(rating));
     const url = CONFIG.GOOGLE_SCRIPT_URL + '?action=submit&data=' + payload;
@@ -256,6 +276,25 @@
     const url = CONFIG.GOOGLE_SCRIPT_URL + '?action=getRatings&t=' + Date.now();
     const resp = await fetch(url);
     return resp.json();
+  }
+
+  // ── Backend router ───────────────────────────────────────
+  function useFirebase() {
+    return CONFIG.BACKEND === 'firebase' && CONFIG.FIREBASE && CONFIG.FIREBASE.databaseURL;
+  }
+
+  async function submitToBackend(rating) {
+    if (useFirebase()) return submitToFirebase(rating);
+    if (CONFIG.GOOGLE_SCRIPT_URL) return submitToSheet(rating);
+  }
+
+  async function fetchFromBackend() {
+    if (useFirebase()) return fetchRatingsFromFirebase();
+    if (CONFIG.GOOGLE_SCRIPT_URL) {
+      const data = await fetchRatingsFromSheet();
+      return data.ratings || data || [];
+    }
+    return [];
   }
 
   // ── Reveal page ────────────────────────────────────────────
@@ -660,14 +699,11 @@
 
   // ── Shared rating fetcher ─────────────────────────────────
   async function getAllRatings() {
-    if (CONFIG.GOOGLE_SCRIPT_URL) {
-      try {
-        const data = await fetchRatingsFromSheet();
-        return data.ratings || data || [];
-      } catch (err) {
-        console.warn('Sheet fetch failed, using local:', err);
-        return getLocalRatings();
-      }
+    try {
+      const ratings = await fetchFromBackend();
+      if (ratings && ratings.length) return ratings;
+    } catch (err) {
+      console.warn('Backend fetch failed, using local:', err);
     }
     return getLocalRatings();
   }
