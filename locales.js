@@ -15,6 +15,8 @@ var LOCALES = {
     pick_name: 'Pick your name...',
     start_tasting: 'Start Tasting',
 
+    drinking_order: 'Drinking Order',
+    drinking_order_hint: 'Oldest roast first',
     sample_number: 'Sample Number',
     sample_hint: 'Enter the 3-digit number from your mini-pack',
     find_coffee: 'Find Coffee',
@@ -121,18 +123,20 @@ var LOCALES = {
     nav_map: 'Карта',
     nav_leaderboard: 'Рэйтынг',
 
-    welcome_heading: 'Сардэчна запрашаем на анлайн-капінг карэйскай кавы',
-    welcome_subtitle: 'Давайце ўсляпую паспрабуем карэйскую спешэлці-каву і ацэнім яе разам',
+    welcome_heading: 'Зміцер запрашае на анлайн-капінг карэйскай кавы',
+    welcome_subtitle: 'Давай ўсляпую паспрабуем карэйскую спешэлці-каву і ацэнім яе разам',
     who_are_you: 'Хто ты?',
     pick_name: 'Выберы імя...',
     start_tasting: 'Пачаць',
 
+    drinking_order: 'Парадак дэгустацыі',
+    drinking_order_hint: 'Спачатку старэйшая абсмажка',
     sample_number: 'Нумар сэмпла',
     sample_hint: 'Увядзі 3-значны нумар з пакунка',
     find_coffee: 'Знайсці каву',
-    sample_not_found: 'Узор не знойдзены. Правер нумар.',
+    sample_not_found: 'Сэмпл не знойдзены. Правер нумар.',
     already_rated: 'Ты ўжо ацаніў(ла) гэтую каву!',
-    form_hint: 'Пастаў хаця б Агульную адзнаку (1–9). Астатнія па жаданні. Вышэй = падабаецца больш.',
+    form_hint: 'Пастаў хаця б Агульную ацэнку (1–9). Астатнія па жаданні. Вышэй = падабаецца больш.',
     notes_placeholder: 'Нататкі (неабавязкова)',
     submit_rating: 'Адправіць ацэнку',
 
@@ -142,7 +146,7 @@ var LOCALES = {
     cat_acidity: 'Кіслотнасць',
     cat_sweetness: 'Салодкасць',
     cat_mouthfeel: 'Цела',
-    cat_overall: 'Агульная адзнака',
+    cat_overall: 'Агульная ацэнка',
     hint_fragrance_aroma: 'Як пахне? Падабаецца водар — стаў вышэй.',
     hint_flavor: 'Асноўны смак. Падабаецца — вышэй.',
     hint_aftertaste: 'Смак, які застаецца пасля глытка. Прыемны — вышэй.',
@@ -209,7 +213,7 @@ var LOCALES = {
     lb_proletarian: 'Пралетарскія',
     lb_vs: 'vs',
     lb_std: 'σ {n}',
-    lb_scope: 'Рэйтынг для {n} кавы, якія ты паспрабаваў(ла) (ацэнкі ўсіх)',
+    lb_scope: 'Рэйтынг для {n} гатункаў кавы, якія ты паспрабаваў(ла) (ацэнкі ўсіх)',
     lb_rating_count: '{n} ац.',
 
     geo: {
@@ -314,16 +318,18 @@ var LOCALES = {
     nav_map: 'Карта',
     nav_leaderboard: 'Рейтинг',
 
-    welcome_heading: 'Ласкаво просимо на онлайн-каппінг корейської кави',
-    welcome_subtitle: 'Давайте наосліп спробуємо корейську спешелті-каву і оцінимо її разом',
+    welcome_heading: 'Зміцер запрошує на онлайн-каппінг корейської кави',
+    welcome_subtitle: 'Давай наосліп спробуємо корейську спешелті-каву і оцінимо її разом',
     who_are_you: 'Хто ти?',
     pick_name: 'Обери ім\'я...',
     start_tasting: 'Почати',
 
+    drinking_order: 'Порядок дегустації',
+    drinking_order_hint: 'Спочатку найстаріше обсмаження',
     sample_number: 'Номер зразка',
     sample_hint: 'Введи 3-значний номер з пачки',
     find_coffee: 'Знайти каву',
-    sample_not_found: 'Зразок не знайдено. Перевір номер.',
+    sample_not_found: 'Семпл не знайдено. Перевір номер.',
     already_rated: 'Ти вже оцінив(ла) цю каву!',
     form_hint: 'Постав хоча б Загальну оцінку (1–9). Інші за бажанням. Вище = подобається більше.',
     notes_placeholder: 'Нотатки (необов\'язково)',
@@ -402,7 +408,7 @@ var LOCALES = {
     lb_proletarian: 'Пролетарські',
     lb_vs: 'vs',
     lb_std: 'σ {n}',
-    lb_scope: 'Рейтинг для {n} кави, які ти спробував(ла) (оцінки всіх)',
+    lb_scope: 'Рейтинг для {n} ґатунків кави, які ти спробував(ла) (оцінки всіх)',
     lb_rating_count: '{n} оц.',
 
     geo: {
@@ -507,16 +513,18 @@ var LOCALES = {
     nav_map: 'Карта',
     nav_leaderboard: 'Рейтинг',
 
-    welcome_heading: 'Добро пожаловать на онлайн-каппинг корейского кофе',
-    welcome_subtitle: 'Давайте вслепую попробуем корейский спешелти-кофе и оценим его вместе',
+    welcome_heading: 'Змицер приглашает на онлайн-каппинг корейского кофе',
+    welcome_subtitle: 'Давай вслепую попробуем корейский спешелти-кофе и оценим его вместе',
     who_are_you: 'Кто ты?',
     pick_name: 'Выбери имя...',
     start_tasting: 'Начать',
 
+    drinking_order: 'Порядок дегустации',
+    drinking_order_hint: 'Сначала самая старая обжарка',
     sample_number: 'Номер образца',
     sample_hint: 'Введи 3-значный номер с мини-пачки',
     find_coffee: 'Найти кофе',
-    sample_not_found: 'Образец не найден. Проверь номер.',
+    sample_not_found: 'Сэмпл не найден. Проверь номер.',
     already_rated: 'Ты уже оценил(а) этот кофе!',
     form_hint: 'Поставь хотя бы Общую оценку (1–9). Остальные по желанию. Выше = нравится больше.',
     notes_placeholder: 'Заметки (необязательно)',
@@ -595,7 +603,7 @@ var LOCALES = {
     lb_proletarian: 'Пролетарские',
     lb_vs: 'vs',
     lb_std: 'σ {n}',
-    lb_scope: 'Рейтинг для {n} кофе, которые ты попробовал(а) (оценки всех)',
+    lb_scope: 'Рейтинг для {n} сортов кофе, которые ты попробовал(а) (оценки всех)',
     lb_rating_count: '{n} оц.',
 
     geo: {
@@ -706,6 +714,8 @@ var LOCALES = {
     pick_name: '이름을 선택하세요...',
     start_tasting: '시작',
 
+    drinking_order: '시음 순서',
+    drinking_order_hint: '오래된 로스팅부터',
     sample_number: '샘플 번호',
     sample_hint: '미니팩의 3자리 번호를 입력하세요',
     find_coffee: '커피 찾기',

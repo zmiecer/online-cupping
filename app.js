@@ -174,6 +174,24 @@
     $('#btn-submit').disabled = !overallSelected;
   }
 
+  function renderDrinkingOrder() {
+    const sorted = [...coffeesData]
+      .sort((a, b) => {
+        if (!a.roast_date && !b.roast_date) return 0;
+        if (!a.roast_date) return 1;
+        if (!b.roast_date) return -1;
+        return a.roast_date.localeCompare(b.roast_date);
+      });
+
+    $('#drinking-order-list').innerHTML = sorted.map((c, i) => `
+      <div class="drinking-order-row">
+        <span class="drinking-order-num">${i + 1}.</span>
+        <span class="sample-badge small">${c.sample_number}</span>
+        <span class="drinking-order-date">${c.roast_date || '—'}</span>
+      </div>
+    `).join('');
+  }
+
   function initRatingForm() {
     $('#rating-form').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -1156,6 +1174,7 @@
     initWelcome();
     initRate();
     initRatingForm();
+    renderDrinkingOrder();
     initReveal();
     initLeaderboard();
     initUserBadge();

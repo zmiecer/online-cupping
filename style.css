@@ -321,6 +321,38 @@ nav {
   margin-bottom: 8px;
 }
 
+.sample-badge.small {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  margin-bottom: 0;
+}
+
+.drinking-order-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+.drinking-order-num {
+  width: 24px;
+  text-align: right;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.drinking-order-date {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+#drinking-order-card details summary {
+  cursor: pointer;
+  user-select: none;
+}
+
 .sample-badge.large {
   font-size: 1.75rem;
   padding: 10px 28px;
