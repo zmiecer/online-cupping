@@ -1066,6 +1066,21 @@ nav {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--color-text-secondary);
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+@media (max-width: 400px) {
+  .leaderboard-stats {
+    gap: 4px;
+  }
+  .stat-item .stat-value {
+    font-size: 1.25rem;
+  }
+  .stat-item .stat-label {
+    font-size: 0.5625rem;
+    letter-spacing: 0.01em;
+  }
 }
 
 .ranking-list {
