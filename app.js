@@ -1312,27 +1312,31 @@
     scopeEl.textContent = I18N.tpl('lb_scope', { n: mySamples.size });
     show(scopeEl);
 
-    renderLeaderboard(scopedRatings);
+    renderLeaderboard(scopedRatings, allRatings, mySamples.size);
     show(content);
   }
 
-  function renderLeaderboard(ratings) {
+  function renderLeaderboard(ratings, allRatings, myCoffeeCount) {
     const statsEl = $('#leaderboard-stats');
-    const participants = [...new Set(ratings.map(r => r.participant))];
-    const samples = [...new Set(ratings.map(r => r.sample_number))];
+    const totalParticipants = [...new Set(allRatings.map(r => r.participant))];
+    const totalSamples = [...new Set(allRatings.map(r => r.sample_number))];
 
     statsEl.innerHTML = `
       <div class="stat-item">
-        <div class="stat-value">${ratings.length}</div>
+        <div class="stat-value">${allRatings.length}</div>
         <div class="stat-label">${I18N.t('lb_ratings')}</div>
       </div>
       <div class="stat-item">
-        <div class="stat-value">${participants.length}</div>
+        <div class="stat-value">${totalParticipants.length}</div>
         <div class="stat-label">${I18N.t('lb_tasters')}</div>
       </div>
       <div class="stat-item">
-        <div class="stat-value">${samples.length}</div>
+        <div class="stat-value">${totalSamples.length}</div>
         <div class="stat-label">${I18N.t('lb_coffees_tried')}</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">${myCoffeeCount}</div>
+        <div class="stat-label">${I18N.t('lb_your_coffees')}</div>
       </div>
     `;
 
