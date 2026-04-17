@@ -414,8 +414,22 @@
     btn.disabled = true;
 
     const rating = collectRating();
-    lastRating = rating;
 
+    try {
+      const existing = await fetchFromBackend();
+      const alreadyRated = existing.some(
+        r => r.participant === currentUser && Number(r.sample_number) === currentCoffee.sample_number
+      );
+      if (alreadyRated) {
+        alert(I18N.t('already_rated'));
+        resetRateForm();
+        return;
+      }
+    } catch (err) {
+      console.warn('Pre-submit duplicate check failed, continuing:', err);
+    }
+
+    lastRating = rating;
     saveRatingLocal(rating);
 
     try {
