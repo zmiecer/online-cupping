@@ -1480,14 +1480,8 @@ nav {
 
 .map-coffee-link {
   color: var(--color-accent);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  cursor: pointer;
+  text-decoration: none;
   font-weight: 600;
-}
-
-.map-coffee-link:hover {
-  opacity: 0.85;
 }
 
 .map-coffee-link:active {
