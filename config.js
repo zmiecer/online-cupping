@@ -13,7 +13,7 @@ const CONFIG = {
   GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxCFii6AET4NB1DFsmSWbhLUVDagLBvHH-IIwpPmrfUvGzLhoQ9s9Nir200HXmgb0DIPQ/exec',
 
   // Set to true when voting is over to reveal full stats
-  VOTING_ENDED: false,
+  VOTING_ENDED: true,
 
   PARTICIPANTS: [
     'Zmicier',
