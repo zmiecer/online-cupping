@@ -1356,8 +1356,8 @@
 
     const ended = CONFIG.VOTING_ENDED;
 
-    $('#title-top-coffees').textContent = I18N.t(ended ? 'lb_top_coffees' : 'lb_current_top_coffees');
-    $('#title-top-roasteries').textContent = I18N.t(ended ? 'lb_top_roasteries' : 'lb_current_top_roasteries');
+    $('#title-top-coffees').textContent = I18N.t('lb_current_top_coffees');
+    $('#title-top-roasteries').textContent = I18N.t('lb_current_top_roasteries');
 
     renderTopCoffees(ratings);
     renderTopRoasteries(ratings);
